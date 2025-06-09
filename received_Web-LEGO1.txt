@@ -1,0 +1,171 @@
+Summarize research
+**Abstract**
+
+- Web-LEGO is introduced as an opt-in service to speed up webpages by replacing slow content with faster, similar content.
+- The study evaluates the prevalence of CDN-less websites, the availability of similar content, and user perception of similar webpages through automated tests and real user feedback.
+- Results show Web-LEGO significantly improves Page Load Time (PLT) and user-perceived PLT, especially for CDN-less websites, with high visual accuracy and positive user interest.
+
+**Introduction**
+
+- High Quality of Experience (QoE) on the Web is crucial for content providers and end-users, impacting business revenues and user engagement.
+- Content Distribution Networks (CDNs) are valuable for speeding up web content delivery but are not affordable for all content providers; many websites remain CDN-less.
+- Web-LEGO aims to improve webpage speed on the client side without server-side cooperation, trading content strictness for performance by using similar content.
+
+**Reality Check**
+
+- A significant fraction of websites do not use a CDN, presenting an opportunity for Web-LEGO to improve performance.
+- The Internet has abundant similar content, with Google Images finding at least 10 similar images for 92% of tested cases.
+- Crowdsourcing user feedback indicates that a majority (92.5%) of users find Web-LEGO-generated webpages acceptable as faster alternatives to original pages.
+
+**Design and Implementation**
+
+- Web-LEGO's architecture includes a client, a similarity storage server (3S), and a reverse file search server (RFSS).
+- The client intercepts web requests, using 3S to find alternative resources and RFSS to identify similar content; content providers can control sharing via HTTP(S) headers.
+- Web-LEGO supports images, JS, and CSS files, using opportunistic replacement for images and identical copies for JS/CSS files, designed as an opt-in service for users and content providers.
+
+**Evaluation**
+
+- The evaluation uses metrics such as PLT (Page Load Time), uPLT (user-perceived PLT), and normalized benefit to measure Web-LEGO's performance.
+- The testbed includes a Web-LEGO client, 3S, and RFSS, with experiments conducted on CDN-hosted and CDN-less websites.
+- Results show that Web-LEGO reduces PLT for 80% of CDN-less websites, with significant reductions also observed for CDN-hosted websites, and improves user perceived page load times.
+
+**Web Objects Characterization**
+
+- Image files have the most potential for replacements, followed by JS and CSS files, regardless of whether a website is CDN-hosted or CDN-less.
+- For CDN-less websites, potential replacements often translate into actual replacements, while CDN-hosted websites show fewer actual replacements due to existing optimizations.
+- Most original images have at least one equal alternative (73.9%), and a majority (94.2%) of images have a high visual accuracy [R5, R6].
+
+**Baseline Network Experiments**
+
+- Web-LEGO reduces the PLT for 80% of the CDN-less websites, with reductions in the order of multiple seconds.
+- Web-LEGO's performance improvements also hold in terms of uPLT, or how fast people perceive a webpage.
+- Web-LEGO’s normalized benefit is above the 0.029 threshold in most cases, i.e., 80% of CDN-less cases and in 58% of CDN-hosted cases.
+
+**Challenging Network Conditions**
+
+- Web-LEGO is beneficial in both the broadband and 4G scenarios, with the performance improves as the number of additional requests grows.
+- Requesting alternative content can cause the PLT to increase in the case of a 3.5G network.
+- Web-LEGO provides clear and substantial performance benefits in the mobile broadband scenario.
+
+**Discussion**
+
+- Algorithms could be developed to determine the right level of request redundancy based on the PLT of a particular website, Web-LEGO setup.
+- RFSS server should only rely on reputable websites using information from Alexa.
+- Clients and CDN-less websites directly benefit from Web-LEGO’s page load time speedup.
+
+**Related Work**
+
+- The works in [50] (for files) and in [51] (for videos) are the only previous attempts to look into content similarity to improve an application performance.
+- KLOTSKI [4] is a system that aims at improving user experience by prioritizing the content most relevant to a user’s preferences.
+- Shandian [1] is another system whose goal is to remove the intrinsic inefficiencies of webpage loads.
+
+**Conclusion**
+
+- Web-LEGO trades content "strictness" for faster webpages.
+- Crowdsourcing validated Web-LEGO's idea via interrogating a thousand users on their interest on slightly modified webpages in exchange for a faster browsing experience.
+- Web-LEGO offers speedups of up to 5 seconds in user perceived page load time.
+
+1) What is the problem that the paper mainly discuss?
+The main problem discussed in the paper is the performance and speed limitation of many websites that do not use Content Distribution Networks (CDNs), especially less popular or CDN-less websites. These sites often experience slower page load times, negatively impacting user experience and content providers' revenues. Despite advances in web protocols and server-side optimizations, the adoption of CDNs and other technologies remains limited due to cost and technical barriers. The paper addresses how to improve webpage load times from the client side without requiring server cooperation, by trading strict content exactness for faster loading through the use of similar or identical alternative content available on the Internet. This approach targets overcoming the limitations of CDN-less websites and enhancing overall web performance and user Quality of Experience (QoE).
+
+2) Why is the problem important?
+The problem is important because webpage load time (PLT) directly affects user Quality of Experience (QoE), which in turn influences content providers' business revenues and users' willingness to wait for and revisit a webpage. For example, Amazon reported that every 100 ms increase in page load time costs them 1% in sales. Despite advances in web technologies and protocols, many websites remain CDN-less (e.g., 77% of the Alexa top one million websites), meaning they lack server-side infrastructure to speed up content delivery. This results in poor performance that can create a negative cycle where websites fail to attract users due to slow performance, yet can't afford the infrastructure improvements that could fix it. Addressing this problem by improving site speed, especially for CDN-less websites, is crucial to enhance end-user experience, stimulate traffic, and ultimately increase the economic sustainability of these websites.
+
+3) Why is the problem difficult to solve?
+The problem is difficult to solve because improving webpage load times typically requires server-side support such as deploying CDNs, updating protocols (e.g., HTTP/2), or optimizing server infrastructure, which many less popular or CDN-less websites cannot afford or lack the expertise to implement. Moreover, the web ecosystem is complex, where multiple servers, third-party services (e.g., ads), and dynamic content affect loading times, making client-side optimization challenging. Additionally, substituting content with similar but not identical alternatives raises issues of content consistency, visual accuracy, copyright, security (e.g., risks of malware injection or hijacking servers), and economic sustainability, as origin websites might have varied interests. Selecting which web objects to replace for maximum user-perceived benefit, balancing extra network traffic induced by requesting alternatives, and ensuring user trust further increase the complexity. These challenges demand novel mechanisms that can cautiously trade content strictness for speed without significantly degrading user experience or security.
+
+4) Summarize the existing methodologies for the problem. Not just copy the sentences in the paper. Try to describe what you understand in your own words.
+Existing methodologies to speed up webpage loading mainly focus on server-side or browser-centric optimizations and typically preserve strict content fidelity. One approach involves optimizing or compressing the webpage’s dependency graph, which refers to the relationships and loading order of various web resources (like images, scripts, and CSS). For example, systems prioritize loading content most relevant to user preferences or reduce inefficiencies in page loads by controlling which parts load first to improve perceived speed.
+
+Some solutions improve how browsers understand a page's dependencies, enabling more precise scheduling to minimize wasted time. For mobile webpages, precomputing complex structures like the JavaScript heap and DOM tree on the server side and then sending logs that allow the client to reconstruct the page faster is another approach.
+
+Other methods include server-assisted resource resolution, where web servers help clients find resources more efficiently, thereby shortening delays. Another direction, related to Web-LEGO's idea, uses content similarity to accelerate transfer, such as leveraging file similarity for faster multi-source file downloads. However, these prior systems still rely on exact content matching, unlike Web-LEGO, which deliberately relaxes content strictness to gain speed.
+
+Overall, existing techniques use server or browser cooperation to reduce load times while maintaining content exactness, and none have fully explored trading strict content accuracy for acceleration at the client-side in the way Web-LEGO does to exploit widely available similar content on the Internet.
+
+5) Describe the main ideas of the proposed scheme in this paper in your own words.
+The proposed scheme, Web-LEGO, introduces a client-side mechanism that speeds up webpage loading by relaxing the traditional requirement that web content must match exactly what was requested. Instead of insisting on the original resource, Web-LEGO allows users to fetch similar or equivalent content from alternative sources when it can be delivered faster. For example, it might replace an image or JavaScript file with a visually or functionally similar version hosted on a server closer or with better response time.
+
+Web-LEGO operates as an opt-in service, so users and content providers must agree to participate, which addresses concerns about content inconsistencies or copyright issues. On the client side, it detects web objects and, when feasible, replaces them on-the-fly with similar copies obtained from a centralized similarity storage server, which keeps track of similar web resources. This server-client system leverages the reality that many websites share similar or identical content, especially those without CDN support, and exploits these redundancies to speed up content delivery.
+
+The key idea is to trade some strictness on content correctness for improved page load time and better user experience, showing that most users tolerate slight differences if it results in faster browsing. Web-LEGO’s design includes mechanisms to store, query, and validate content similarity to ensure high visual accuracy and positive user perception while achieving substantial reductions in both traditional and user-perceived page load times.
+
+Overall, Web-LEGO is about smartly using the widespread availability of similar content across the web to expedite page loading without requiring major changes to server infrastructure or complex browser modifications.
+
+6) What are the notable findings in the evaluation results?
+The evaluation of Web-LEGO revealed several notable findings:
+
+1. **Performance Improvements:**
+   - Web-LEGO significantly reduces Page Load Time (PLT) and user-perceived Page Load Time (uPLT). For CDN-less websites, PLT reductions occur in 80% of cases, with improvements up to 5.5 seconds. For CDN-hosted sites, improvements are observed in 58% of the cases, albeit generally smaller due to fewer replacement opportunities.
+   - uPLT measurements indicate substantial user-perceived speed gains as well.
+
+2. **Accuracy of Content Replacement:**
+   - Web-LEGO achieves a high visual accuracy of 94.2% in selecting alternative content that appears visually similar to the original.
+   - Crowd-sourced user feedback confirms that 92% of participants rated the Web-LEGO generated webpages positively (acceptable to very good), indicating users are generally tolerant of minor content differences in exchange for faster loading.
+
+3. **Network Scenario Impact:**
+   - Web-LEGO provides benefits in broadband and 4G scenarios, with larger improvements seen in more constrained networks like 4G (up to 45% improvement in median PLT for N=3 alternative requests).
+   - However, in lower capacity networks such as 3.5G (5 Mbps download), aggressive alternative requests can cause downlink congestion, degrading performance. In such cases, Web-LEGO should limit or carefully select which content to replace.
+
+4. **Normalized Benefit and Economic Viability:**
+   - Web-LEGO demonstrates sufficient economic benefit where the performance gain outweighs the cost of additional data. For broadband and mobile broadband users, sending up to 3 alternative requests is beneficial according to the normalized benefit metric (milliseconds improvement per KB of extra traffic).
+
+5. **Content Replacement Scope:**
+   - Web-LEGO currently supports images, JavaScript, and CSS files for replacement. It refrains from replacing HTML or media objects to avoid layout and behavior inconsistencies but aims to expand this in future work.
+
+These findings collectively indicate that Web-LEGO effectively leverages the availability of similar content on the Internet to speed up page loads, especially benefiting users who have limited infrastructure support like low CDN usage websites, while maintaining acceptable content fidelity and user satisfaction.
+
+7) Do you agree or disagree with the authors' proposal? Please explain your reasoning.
+I agree with the authors' proposal of Web-LEGO for the following reasons:
+
+1. **Innovative Approach to Web Acceleration:**
+   Web-LEGO introduces a novel client-side approach that leverages widely available similar content on the Internet to reduce webpage load times without requiring changes in server infrastructure or relying solely on CDNs, which are less accessible to less popular sites. This addresses a real gap, benefiting the large fraction of CDN-less websites (up to 77% among the Alexa top 1 million) that currently lack efficient content delivery support.
+
+2. **Balanced Trade-off Between Content Strictness and Performance:**
+   The proposal smartly relaxes the strict "exact content" requirement, substituting similar but not identical objects only where the visual or functional difference is minimal and acceptable to users. This balance appears validated through their extensive user feedback studies, showing 92% user acceptance of alternative content and high visual accuracy (94.2%).
+
+3. **Demonstrated Significant Performance Gains:**
+   The evaluation shows notable PLT reductions, especially for CDN-less websites, and benefits across broadband and mobile network scenarios. The results also candidly acknowledge the limits in lower bandwidth contexts (e.g., 3.5G), suggesting adaptive strategies to mitigate congestion. This transparency strengthens the feasibility of the approach.
+
+4. **Economic and Security Considerations:**
+   The authors address potential security concerns (e.g., server hijacking) by proposing reliance on reputable sources and outline economic sustainability by highlighting how Web-LEGO-induced traffic can benefit origin sites' rankings and revenues.
+
+5. **Opt-in Design Respecting User Choice:**
+   By making the service opt-in and informing users about the trade-offs, Web-LEGO respects user agency and can evolve with consent, which is crucial for deployment.
+
+However, potential challenges remain, such as managing consistency and copyright issues, and extending content types supported beyond images, JS, and CSS. Yet, these are acknowledged as future work.
+
+Overall, the proposal is both original and pragmatic, bringing a fresh client-side solution that complements existing web acceleration techniques and can provide tangible benefits where traditional methods fall short. Given the solid empirical backing and comprehensive consideration of challenges, I consider the authors' proposal to be well-founded and promising.
+
+8) Describe any ideas to enhance the proposed scheme.
+Several ideas could enhance Web-LEGO’s proposed scheme based on insights from the paper:
+
+1. **Advanced Alternative Content Selection Algorithms:**
+   Instead of sending a fixed number (e.g., N=3) of alternative requests blindly, develop smarter, context-aware algorithms that dynamically adjust the number and choice of alternative requests based on:
+   - Current network conditions (available bandwidth, latency, congestion)
+   - Website characteristics (PLT, CDN presence)
+   - Object popularity or replaceability likelihood
+   This would optimize the trade-off between extra traffic and latency savings and avoid congestion in constrained networks like 3.5G.
+
+2. **Broader Content Type Support:**
+   Extend support beyond images, JS, and CSS to other media types such as videos or audio files. While noted as challenging due to QoE complexity and copyright, leveraging reverse video search and content similarity techniques could open new acceleration opportunities, especially for rich media-heavy pages.
+
+3. **Integration with Browser or OS:**
+   Although the current proxy-based implementation is flexible, integrating Web-LEGO more deeply as a browser feature or operating system service could reduce overhead and improve efficiency in intercepting and substituting content with lower latency and complexity.
+
+4. **Machine Learning for Similarity Detection and Quality Assessment:**
+   Employ advanced machine learning models to improve similarity matching accuracy and predict QoE impact of substituting particular content. This could refine content replacement decisions considering subtle differences that may affect user experience.
+
+5. **Security and Privacy Enhancements:**
+   Implement rigorous security checks on alternative content sources to prevent injection of malicious or inappropriate content. Incorporate privacy-preserving mechanisms to ensure user browsing data confidentiality during similarity lookup and content fetching.
+
+6. **User Customization and Feedback Loop:**
+   Provide users with control over content strictness levels or preferences (e.g., visual fidelity versus speed) and incorporate feedback mechanisms to learn from user interactions to further refine substitution strategies and boost acceptance.
+
+7. **Collaborative and Distributed Similarity Storage:**
+   Instead of relying on centralized similarity storage servers (3S), explore decentralized or edge-based architectures to distribute similarity metadata closer to users, reducing lookup latency and improving scalability.
+
+8. **Adaptive Caching Strategies:**
+   Combine Web-LEGO with intelligent caching mechanisms that recognize frequently reused alternative content to minimize repeated fetches, reducing overhead further.
+
+These enhancements could help Web-LEGO better adapt to diverse user/network conditions, broaden its applicability, improve robustness, and increase user satisfaction.

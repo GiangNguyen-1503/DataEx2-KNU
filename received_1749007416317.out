@@ -1,0 +1,28 @@
+Summarize research
+**Abstract**
+
+- Web-LEGO is introduced as an opt-in service to speed up webpages by replacing slow content with faster, similar content.
+- The study evaluates the prevalence of CDN-less websites, the availability of similar content, and user perception of similar webpages through automated tests and real user feedback.
+- Results show Web-LEGO significantly improves Page Load Time (PLT) and user-perceived PLT, especially for CDN-less websites, with high visual accuracy and positive user interest.
+
+**Introduction**
+
+- High Quality of Experience (QoE) on the Web is crucial for content providers and end-users, impacting business revenues and user engagement.
+- Content Distribution Networks (CDNs) are valuable for speeding up web content delivery but are not affordable for all content providers; many websites remain CDN-less.
+- Web-LEGO aims to improve webpage speed on the client side without server-side cooperation, trading content strictness for performance by using similar content.
+
+**Reality Check**
+
+- A significant fraction of websites do not use a CDN, presenting an opportunity for Web-LEGO to improve performance.
+- The Internet has abundant similar content, with Google Images finding at least 10 similar images for 92% of tested cases.
+- Crowdsourcing user feedback indicates that a majority (92.5%) of users find Web-LEGO-generated webpages acceptable as faster alternatives to original pages.
+
+**Design and Implementation**
+
+- Web-LEGO's architecture includes a client, a similarity storage server (3S), and a reverse file search server (RFSS).
+- The client intercepts web requests, using 3S to find alternative resources and RFSS to identify similar content; content providers can control sharing via HTTP(S) headers.
+- Web-LEGO supports images, JS, and CSS files, using opportunistic replacement for images and identical copies for JS/CSS files, designed as an opt-in service for users and content providers.
+
+**Evaluation**
+
+- The evaluation uses metrics 
